@@ -1724,7 +1724,7 @@ MavlinkReceiver::handle_message_battery_status(mavlink_message_t *msg)
 
 	battery_status.voltage_v = voltage_sum;
 	battery_status.voltage_filtered_v  = voltage_sum;
-	battery_status.current_a = battery_status.current_filtered_a = (float)(battery_mavlink.current_battery) / 100.0f;
+	battery_status.current_a = (float)(battery_mavlink.current_battery) / 100.0f;
 	battery_status.current_filtered_a = battery_status.current_a;
 	battery_status.remaining = (float)battery_mavlink.battery_remaining / 100.0f;
 	battery_status.discharged_mah = (float)battery_mavlink.current_consumed;
@@ -2431,10 +2431,10 @@ MavlinkReceiver::handle_message_landing_target(mavlink_message_t *msg)
 
 	} else if (landing_target.position_valid) {
 		// We only support MAV_FRAME_LOCAL_NED. In this case, the frame was unsupported.
-		mavlink_log_critical(&_mavlink_log_pub, "landing target: coordinate frame %" PRIu8 " unsupported\t",
+		mavlink_log_critical(&_mavlink_log_pub, "Landing target: coordinate frame %" PRIu8 " unsupported\t",
 				     landing_target.frame);
 		events::send<uint8_t>(events::ID("mavlink_rcv_lnd_target_unsup_coord"), events::Log::Error,
-				      "landing target: unsupported coordinate frame {1}", landing_target.frame);
+				      "Landing target: unsupported coordinate frame {1}", landing_target.frame);
 
 	} else {
 		irlock_report_s irlock_report{};
@@ -2713,6 +2713,8 @@ MavlinkReceiver::handle_message_hil_state_quaternion(mavlink_message_t *msg)
 
 		matrix::Eulerf euler{matrix::Quatf(hil_state.attitude_quaternion)};
 		hil_local_pos.heading = euler.psi();
+		hil_local_pos.heading_good_for_control = PX4_ISFINITE(euler.psi());
+		hil_local_pos.unaided_heading = NAN;
 		hil_local_pos.xy_global = true;
 		hil_local_pos.z_global = true;
 		hil_local_pos.vxy_max = INFINITY;
@@ -3267,7 +3269,9 @@ MavlinkReceiver::run()
 			_mission_manager.check_active_mission();
 			_mission_manager.send();
 
-			_parameters_manager.send();
+			if (_mavlink->get_mode() != Mavlink::MAVLINK_MODE::MAVLINK_MODE_IRIDIUM) {
+				_parameters_manager.send();
+			}
 
 			if (_mavlink->ftp_enabled()) {
 				_mavlink_ftp.send();

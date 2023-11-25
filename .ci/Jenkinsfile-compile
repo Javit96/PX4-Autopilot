@@ -88,7 +88,6 @@ pipeline {
                      "nxp_fmuk66-e_socketcan",
                      "nxp_fmuk66-v3_default",
                      "nxp_fmuk66-v3_socketcan",
-                     "nxp_fmurt1062-v1_default",
                      "nxp_mr-canhubk3_default",
                      "nxp_ucans32k146_canbootloader",
                      "nxp_ucans32k146_default",
@@ -111,13 +110,16 @@ pipeline {
                      "px4_fmu-v6c_default",
                      "px4_fmu-v6u_default",
                      "px4_fmu-v6x_default",
+                     "px4_fmu-v6xrt_bootloader",
+                     "px4_fmu-v6xrt_default",
                      "px4_io-v2_default",
                      "raspberrypi_pico_default",
                      "sky-drones_smartap-airlink_default",
                      "spracing_h7extreme_default",
                      "thepeach_k1_default",
                      "thepeach_r1_default",
-                     "uvify_core_default"
+                     "uvify_core_default",
+                     "siyi_n7_default"
             ],
             image: docker_images.nuttx,
             archive: true

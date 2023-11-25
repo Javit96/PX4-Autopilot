@@ -55,6 +55,7 @@ void LoggedTopics::add_default_topics()
 	add_optional_topic("camera_trigger");
 	add_topic("cellular_status", 200);
 	add_topic("commander_state");
+	add_topic("config_overrides");
 	add_topic("cpuload");
 	add_optional_topic("external_ins_attitude");
 	add_optional_topic("external_ins_global_position");
@@ -119,7 +120,7 @@ void LoggedTopics::add_default_topics()
 	add_topic("vehicle_constraints", 1000);
 	add_topic("vehicle_control_mode");
 	add_topic("vehicle_global_position", 200);
-	add_topic("vehicle_gps_position", 500);
+	add_topic("vehicle_gps_position", 100);
 	add_topic("vehicle_land_detected");
 	add_topic("vehicle_local_position", 100);
 	add_topic("vehicle_local_position_setpoint", 100);
@@ -290,6 +291,7 @@ void LoggedTopics::add_default_topics()
 	add_optional_topic_multi("estimator_aid_src_mag", 0, MAX_ESTIMATOR_INSTANCES);
 	add_optional_topic_multi("estimator_aid_src_optical_flow", 0, MAX_ESTIMATOR_INSTANCES);
 	add_optional_topic_multi("estimator_aid_src_terrain_optical_flow", 0, MAX_ESTIMATOR_INSTANCES);
+	add_optional_topic_multi("estimator_aid_src_terrain_range_finder", 0, MAX_ESTIMATOR_INSTANCES);
 	add_optional_topic_multi("estimator_aid_src_sideslip", 0, MAX_ESTIMATOR_INSTANCES);
 
 #endif /* CONFIG_ARCH_BOARD_PX4_SITL */
@@ -330,7 +332,7 @@ void LoggedTopics::add_estimator_replay_topics()
 
 	// current EKF2 subscriptions
 	add_topic("airspeed");
-	add_topic("optical_flow");
+	add_topic("vehicle_optical_flow");
 	add_topic("sensor_combined");
 	add_topic("sensor_selection");
 	add_topic("vehicle_air_data");
